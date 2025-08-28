@@ -1,0 +1,43 @@
+@startuml
+title Workflow - Open Bag, Select Interval, Export to CSV
+
+actor User
+participant "GUI (PyQt + Plotly) / CLI" as UI
+participant "Session Manager" as SM
+participant "Topic Indexer" as TI
+participant "Visualization Engine" as VE
+participant "Trim Engine" as TE
+participant "Export Engine" as EE
+participant "MCAP Reader/Writer (C++)" as MRW
+participant "polars" as PD
+
+User -> UI: Start Tool
+UI -> SM: Initialize session
+
+User -> UI: Load bag file (MCAP/SQLite2)
+UI -> SM: Request to load bag
+SM -> TI: Index topics and metadata
+TI -> MRW: Read topic list and time range
+MRW --> TI: Return topics and metadata
+TI --> SM: Topic list ready
+SM --> UI: Display available topics and timeline
+
+User -> UI: Select topic(s) and time interval
+UI -> VE: Request visualization of topic(s)
+VE -> MRW: Stream data in selected range
+MRW --> VE: Return data samples
+VE --> UI: Display interactive plot
+
+User -> UI: Confirm start/end time for export
+UI -> SM: Request export to CSV/MCAP
+SM -> TE: Trim data within interval
+TE -> MRW: Read data in interval
+MRW --> TE: Return trimmed data
+TE --> EE: Pass trimmed data
+EE -> PD: Convert to CSV (if chosen)
+PD --> EE: CSV data ready
+EE --> UI: Save file to disk
+
+UI --> User: Export complete (file ready)
+
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+title Lightweight ROS2 Bag Tool - Architecture
+
+package "User Interfaces" {
+    [CLI Interface] as CLI
+    [GUI Interface (PyQt + Plotly)] as GUI
+}
+
+package "Core Application" {
+    [Command Parser]
+    [Session Manager]
+    [Trim Engine]
+    [Export Engine]
+    [Visualization Engine]
+}
+
+package "Data Access Layer" {
+    [MCAP Reader/Writer]
+    [Topic Indexer]
+}
+
+package "External Libraries" {
+    [mcap library]
+    [rosbag2_py]
+    [polars]
+    [plotly]
+}
+
+package "Output Formats" {
+    [MCAP File]
+    [CSV / Parquet]
+    [Filtered Bag]
+}
+
+package "External Tools" {
+    [PID/Filter Design Tools]
+}
+
+CLI --> [Command Parser]
+GUI --> [Session Manager]
+
+[Command Parser] --> [Session Manager]
+[Session Manager] --> [Trim Engine]
+[Session Manager] --> [Export Engine]
+[Session Manager] --> [Visualization Engine]
+
+[Trim Engine] --> [MCAP Reader/Writer]
+[Export Engine] --> [MCAP Reader/Writer]
+[Export Engine] --> [polars]
+[Visualization Engine] --> [plotly]
+[Topic Indexer] --> [MCAP Reader/Writer]
+
+[MCAP Reader/Writer] --> [mcap library]
+
+[Export Engine] --> [MCAP File]
+[Export Engine] --> [CSV / Parquet]
+[CSV / Parquet] --> [PID/Filter Design Tools]
+[MCAP File] --> [PID/Filter Design Tools]
+
+@enduml

@@ -1,0 +1,46 @@
+# .gitignore for ROS2 MCAP Visualization and Trimming Tool (PyQt project)
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+.env/
+venv/
+ENV/
+*.egg-info/
+
+# Qt/GUI
+*.qrc
+*.ui
+*.pyqt5
+*.pyqt6
+*.qt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# Build
+build/
+dist/
+*.so
+*.dll
+*.exe
+
+# MCAP/Bag files
+*.bag
+*.mcap
+
+# Logs
+*.log
+
+# Parquet/CSV exports
+*.csv
+*.parquet
